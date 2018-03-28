@@ -8,7 +8,7 @@ class VideoInfo
     class Tedx < Provider
       def initialize(url, options = {})
         @url = url
-        @url = _parse_url
+        @info = _parse_url
       end
       
       def self.usable?(url)
@@ -41,7 +41,23 @@ class VideoInfo
             break
           end
         end
-        talk_data
+        talk_data 
+      end
+
+      def title
+        @info[:title]
+      end
+
+      def author
+        @info[:author]
+      end
+
+      def embed_url
+        @info[:embed_url]
+      end
+
+      def url
+        @info[:url]
       end
 
       def _api_base
