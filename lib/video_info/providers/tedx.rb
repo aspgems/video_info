@@ -8,7 +8,7 @@ class VideoInfo
     class Tedx < Provider
       def initialize(url, options = {})
         @url = url
-        @info = _parse_url
+        @talk_data = _parse_url
       end
       
       def self.usable?(url)
@@ -21,19 +21,19 @@ class VideoInfo
       end
 
       def title
-        @info[:title]
+        @talk_data[:title]
       end
 
       def author
-        @info[:author]
+        @talk_data[:author]
       end
 
       def embed_url
-        @info[:embed_url]
+        @talk_data[:embed_url]
       end
 
       def url
-        @info[:url]
+        @talk_data[:url]
       end
 
       private
@@ -47,7 +47,7 @@ class VideoInfo
         doc.css('div.talk-link').each do |talk|
           talk_path = talk.css('a.ga-link').first.try(:attr, 'href')
           if talk_path.ends_with?(slug)
-            talk_data = {
+            @talk_data = {
             cover: talk.css('img.thumb__image').first.try(:attr, 'src'),
             title: talk.css('h4.h9.m5 a').first.try(:content).try(:strip),
             author: talk.css('h4.talk-link__speaker').first.try(:content).try(:strip),
