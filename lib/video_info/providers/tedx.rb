@@ -8,7 +8,7 @@ class VideoInfo
     class Tedx < Provider
       def initialize(url, options = {})
         @url = url
-        @talk_data = _parse_url
+        _parse_url
       end
       
       def self.usable?(url)
@@ -43,7 +43,7 @@ class VideoInfo
         query = slug.split('_')[0..1].join('+')
         search_url = 'https://www.ted.com/talks?q=' + query
         doc = Nokogiri::HTML(open(search_url))
-        talk_data = {}
+        @talk_data = {}
         doc.css('div.talk-link').each do |talk|
           talk_path = talk.css('a.ga-link').first.try(:attr, 'href')
           if talk_path.ends_with?(slug)
@@ -57,7 +57,6 @@ class VideoInfo
             break
           end
         end
-        talk_data 
       end
 
       def _api_base
