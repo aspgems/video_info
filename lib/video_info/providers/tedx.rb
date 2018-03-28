@@ -20,6 +20,22 @@ class VideoInfo
         'Tedx'
       end
 
+      def title
+        @info[:title]
+      end
+
+      def author
+        @info[:author]
+      end
+
+      def embed_url
+        @info[:embed_url]
+      end
+
+      def url
+        @info[:url]
+      end
+
       private
 
       def _parse_url
@@ -42,22 +58,6 @@ class VideoInfo
           end
         end
         talk_data 
-      end
-
-      def title
-        @info[:title]
-      end
-
-      def author
-        @info[:author]
-      end
-
-      def embed_url
-        @info[:embed_url]
-      end
-
-      def url
-        @info[:url]
       end
 
       def _api_base
