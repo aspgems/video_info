@@ -45,7 +45,7 @@ class VideoInfo
         doc = Nokogiri::HTML(open(search_url))
         @talk_data = {}
         doc.css('div.talk-link').each do |talk|
-          talk_path = talk.css('a.ga-link').first.try(:attr, 'href')
+          @talk_path = talk.css('a.ga-link').first.try(:attr, 'href')
           if talk_path.ends_with?(slug)
             @talk_data = {
             cover: talk.css('img.thumb__image').first.try(:attr, 'src'),
