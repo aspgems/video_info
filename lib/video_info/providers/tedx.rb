@@ -52,7 +52,7 @@ class VideoInfo
             title: talk.css('h4.h9.m5 a').first.try(:content).try(:strip),
             author: talk.css('h4.talk-link__speaker').first.try(:content).try(:strip),
             embed_url: 'https://embed.ted.com' + talk_path,
-            url: url
+            url: @url
             }
             break
           end
