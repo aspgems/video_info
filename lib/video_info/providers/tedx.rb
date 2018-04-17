@@ -40,6 +40,30 @@ class VideoInfo
         @talk_data[:cover]
       end
 
+      def thumbnail_medium
+        thumbnail
+      end
+
+      def thumbnail_small
+        thumbnail
+      end
+
+      def thumbnail_large
+        thumbnail
+      end
+
+      def description
+        nil
+      end
+
+      def author_thumbnail
+        nil
+      end
+
+      def author_url
+        nil
+      end
+
       private
 
       def _parse_url
