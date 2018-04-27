@@ -8,7 +8,7 @@ class VideoInfo
     class Tedx < Provider
       def initialize(url, options = {})
         @url = url
-        _parse_url
+        @data = _parse_url
       end
       
       def self.usable?(url)
@@ -21,84 +21,76 @@ class VideoInfo
       end
 
       def title
-        @talk_data[:title]
+        @data[:title]
       end
 
       def author
-        @talk_data[:author]
+        @data[:author]
       end
 
       def embed_url
-        @talk_data[:embed_url]
+        @data[:embed_url]
       end
 
       def url
-        @talk_data[:url]
+        @data[:url]
       end
 
       def thumbnail
-        @talk_data[:cover]
+        @data[:cover]
       end
 
       def thumbnail_medium
-        thumbnail
+        @data[:cover] + '?quality=95&w=480'
       end
 
       def thumbnail_small
-        thumbnail
+        @data[:cover] + '?quality=95&w=120'
       end
 
       def thumbnail_large
-        thumbnail
+        @data[:cover]
       end
 
       def description
-        nil
+        @data[:description]
+      end
+      
+      def duration
+        @data[:duration]
       end
 
       def author_thumbnail
-        nil
+        @data[:author_thumbnail]
       end
 
       def author_url
-        nil
+        @data[:author_url]
       end
 
       private
 
       def _parse_url
-        slug = @url.split('/').last
-        query = slug.split('_')[0..1].join('+')
-        search_url = 'https://www.ted.com/talks?q=' + query
-        doc = Nokogiri::HTML(open(search_url))
-        @talk_data = {}
-        doc.css('div.talk-link').each do |talk|
-          talk_path = talk.css('a.ga-link').first.try(:attr, 'href')
-          if talk_path.ends_with?(slug)
-            @talk_data = {
-            cover: talk.css('img.thumb__image').first.try(:attr, 'src'),
-            title: talk.css('h4.h9.m5 a').first.try(:content).try(:strip),
-            author: talk.css('h4.talk-link__speaker').first.try(:content).try(:strip),
-            embed_url: '//embed.ted.com' + talk_path,
-            url: @url
-            }
-            break
-          end
-        end
+        doc = Nokogiri::HTML(open(@url))
+        data = {url: @url}
+        data[:title] = doc.at("meta[name='title']").try('[]', 'content')
+        data[:description] = doc.at("meta[name='description']").try('[]', 'content')
+        data[:author] = doc.at("meta[name='author']").try('[]', 'content')
+        data[:author_thumbnail] = doc.at("link[itemprop='image']").try('[]', 'href')
+        data[:author_url] = 'https://www.ted.com/' + doc.at("link[itemprop='url']").try('[]', 'href')
+        data[:duration] = doc.at("meta[property='og:video:duration']").try('[]', 'content')
+        data[:embed_url] = doc.at("link[itemprop='embedURL']").try('[]', 'href')
+        data[:cover] = doc.at("link[itemprop='thumbnailUrl']").try('[]', 'content').split('?').first
+        data
+      end
+      
+      def _default_iframe_attributes
+        {}
       end
 
-      def _api_base
+      def _default_url_attributes
+        {}
       end
-
-      def _api_path
-      end
-
-      def _api_url
-      end
-
-      def _url_regex
-      end
-
     end
   end
 end
