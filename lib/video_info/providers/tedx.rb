@@ -70,6 +70,11 @@ class VideoInfo
 
       private
 
+      def _response_code
+        uri = URI.parse(@url)
+        Net::HTTP.get_response(uri).code
+      end
+
       def _parse_url
         doc = Nokogiri::HTML(open(@url))
         data = {url: @url}
