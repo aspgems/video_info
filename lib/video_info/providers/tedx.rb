@@ -99,7 +99,7 @@ class VideoInfo
 
       def author_url_for(data)
         return '' if data.nil?
-        return "https://www.ted.com/#{doc.at("link[itemprop='url']").try('[]', 'href')}" unless data.starts_with?('https://www.ted.com')
+        return "https://www.ted.com/#{data}" unless data.starts_with?('https://www.ted.com')
         data
       end
     end
