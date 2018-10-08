@@ -82,7 +82,7 @@ class VideoInfo
         data[:description] = doc.at("meta[name='description']").try('[]', 'content')
         data[:author] = doc.at("meta[name='author']").try('[]', 'content')
         data[:author_thumbnail] = doc.at("link[itemprop='image']").try('[]', 'href')
-        data[:author_url] = 'https://www.ted.com/' + doc.at("link[itemprop='url']").try('[]', 'href')
+        data[:author_url] = author_url_for(doc.at("link[itemprop='url']").try('[]', 'href'))
         data[:duration] = doc.at("meta[property='og:video:duration']").try('[]', 'content')
         data[:embed_url] = doc.at("link[itemprop='embedURL']").try('[]', 'href')
         data[:cover] = doc.at("link[itemprop='thumbnailUrl']").try('[]', 'content').split('?').first
@@ -95,6 +95,12 @@ class VideoInfo
 
       def _default_url_attributes
         {}
+      end
+
+      def author_url_for(data)
+        return '' if data.nil?
+        return "https://www.ted.com/#{data}" unless data.starts_with?('https://www.ted.com')
+        data
       end
     end
   end
